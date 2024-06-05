@@ -17,6 +17,13 @@ class CodeExplainView(views.APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        method = self.request.query_params.get('_method')
+        if method:
+            queryset = queryset.filter(method=method)
+        return queryset
+
 class UserView:
     pass
 
